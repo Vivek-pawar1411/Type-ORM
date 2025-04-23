@@ -10,6 +10,7 @@ const UserEntity = new EntitySchema({
     password: { type: "varchar", length: 20 },
     role: { type: "enum", enum: ["admin", "employee"], default: "employee" },
     createdAt: { type: "timestamp", default: () => "CURRENT_TIMESTAMP"},
+    proof:{type:"varchar",length:100,nullable:true},
   }
 });
 

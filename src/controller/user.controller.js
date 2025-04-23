@@ -1,8 +1,11 @@
-const { registerUser, getalluser, loginuser, getbyid,
-    changerole, changename,changemail,alterpassword } = require("../service/user.service .js");
+const { registerUser, getalluser, loginuser, getbyid, logoutuser,
+    changerole, changename,changemail,alterpassword,removeuser,proof } = require("../service/user.service .js");
 const { RegisterDto, registerdto } = require('../dto/registerdto.js');
 const { LoginDto, logindto } = require('../dto/logindto.js');
-const { userdata } = require('../utils/user.output.js');
+const {upload}=require('../Multer/multer.js');
+const { response } = require("express");
+
+
 
 async function register(req, res) {
    const dto = new RegisterDto(req.body);
@@ -109,6 +112,47 @@ async function changepassword(req, res) {
    res.status(200).json(result);
 }
 
+async function deleteuser(req,res){
+   const id=parseInt(req.params.id);
+   const result=await removeuser(id);
+   if (result.message === 'User not found') {
+      return res.status(404).json(result);
+  }
+   res.status(200).json(result);
+}
 
-module.exports = { register, getAll, login, getbyuserid, updaterole, updatename,updatemail,changepassword };
+async function uploadproof(req,res){
+   const id=parseInt(req.params.id);
+   const file=req.file;
+   console.log("file",file);
+   if(!req.file){
+      return res.status(400).json({message:'Proof file is required'});
+   }
+   const proofFilePath=req.file.path;
+   if(!proofFilePath){
+      return res.status(400).json({message:'Proof file is required'});
+   }
+   const result=await proof(id,proofFilePath);
+   if(result.message==='User not found'){
+      return res.status(404).json(result);
+   }
+   const combine={...result,...file};
+   res.status(200).json({ message:result.message, data: combine });
+}
+
+async function logout(req,res){
+   const id = parseInt(req.params.id);
+
+   const token = req.header('Authorization')?.split(' ')[1];
+ const result=logoutuser(token,id);
+   res.status(200).json({ message: 'User logged out successfully' });
+}
+
+
+
+
+
+module.exports = { register, getAll, login, getbyuserid, 
+   updaterole, updatename,updatemail,changepassword,
+   deleteuser,uploadproof,logout};
 
