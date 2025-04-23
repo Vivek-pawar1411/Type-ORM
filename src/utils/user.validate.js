@@ -6,7 +6,7 @@ async function validate(req, res, next) {
     }
 
     const token = req.user;
-    //console.log('token:', token);
+    console.log('token:', token);
     console.log('req.params.id:', req.params.id);
     if (!token || parseInt(token.id) !== id) {
         return res.status(403).json({ message: `You are not authorized to access this UserId: ${req.params.id}` });

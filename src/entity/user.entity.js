@@ -9,7 +9,7 @@ const UserEntity = new EntitySchema({
     email: { type: "varchar", length: 100, unique: true },
     password: { type: "varchar", length: 20 },
     role: { type: "enum", enum: ["admin", "employee"], default: "employee" },
-    createdAt: { type: "timestamp", default: () => "CURRENT_TIMESTAMP" },
+    createdAt: { type: "timestamp", default: () => "CURRENT_TIMESTAMP"},
   }
 });
 

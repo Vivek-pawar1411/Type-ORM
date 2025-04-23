@@ -44,7 +44,6 @@ const getalluser = async () => {
             name: user.name,
             email: user.email,
             password: user.password,
-            
             role: user.role,
             createdAt: user.createdAt
         };
